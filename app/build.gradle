@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "com.example.herve.ourschool"
+        minSdkVersion 23
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+            manifestPlaceholders = [
+                    JPUSH_PKGNAME: "com.example.herve.ourschool",
+                    JPUSH_APPKEY : "9255930854c81695290e226c", //JPush上注册的包名对应的appkey.
+                    JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+            ]
+            ndk {
+                abiFilters 'x86', 'armeabi-v7a'
+////                abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
+//                //选择要添加的对应cpu类型的.so库。
+//                // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+            }
+        }
+    }
+    greendao {
+        schemaVersion 1
+        daoPackage 'com.example.herve.ourschool.greendao.dao'
+        targetGenDir 'src/main/java'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    testCompile 'junit:junit:4.12'
+    /*ButterKnife*/
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    /*RxJava*/
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    /*GreenDAO数据库*/
+    compile 'org.greenrobot:greendao:3.1.1'
+    compile 'org.greenrobot:greendao-generator:3.1.0'
+    /*极光推送*/
+    compile 'cn.jiguang:jpush:2.1.9'  // 此处以SDK 2.1.8版本为例
+
+}
